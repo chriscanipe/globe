@@ -28,8 +28,24 @@ var margin = {
 //This is the project for the globe 
 var projection = d3.geo.orthographic().scale(280).translate([400, 300]).clipAngle(90).precision(0.5);
 
+
+
 var path = d3.geo.path()
-    .projection(projection);
+    .projection(projection)
+    .pointRadius(function(d) {
+        if (d.count) {
+            return Math.sqrt(d.count / Math.PI) * 1.3;
+        }
+    });
+
+
+var zoom = d3.behavior.zoom()
+    .scaleExtent([1, 6])
+    .on("zoom", zoomed);
+
+
+var zoomEnhanced = d3.geo.zoom().projection(projection)
+        .on("zoom",zoomedEnhanced);
 
 // Create a voronoi layer for better mouse interaction experience
 // For more reading on voronoi, check out 
@@ -58,11 +74,25 @@ var svg = d3.select('#map').append('svg')
 
 var backgroundCircle = svg.append("circle")
     .attr('cx', width / 1.85)
-    .attr('cy', height / 1.84099)
+    .attr('cy', height / 1.85)
     .attr('r', 0)
     .attr('class', 'geo-globe');
 
 //backgroundCircle.attr('r', projection.scale());
+
+
+// Globe Outline
+// -------------
+var globe = svg.selectAll('path.globe').data([{
+        type: 'Sphere'
+    }])
+    .enter().append('path')
+    .attr('class', 'globe')
+    .attr('d', path);
+
+
+
+
 
 ////////////////////////////////
 ////////////////////////////////  
@@ -94,9 +124,9 @@ function ready(error, world, data) {
             d.start_long = -118.4159553;
 
             if (isNaN(latlong[0]) || isNaN(latlong[1])) {
-            	//Do nothing.
+                //Do nothing.
             } else {
-            	d.greatcircle = new arc.GreatCircle({
+                d.greatcircle = new arc.GreatCircle({
                     x: d.start_long,
                     y: d.start_lat
                 }, {
@@ -111,21 +141,23 @@ function ready(error, world, data) {
 
 
 
+
+
         }
     );
 
 
     data = data.filter(function(d) {
         if (isNaN(d.end_lat) || isNaN(d.end_long)) {
-        	//Do nothing.
+            //Do nothing.
         } else {
-        	return d;
+            return d;
         }
     });
 
 
 
-    svg.selectAll('path')
+    svg.selectAll('baseMap')
         .data(world.features)
         .enter()
         .append('path')
@@ -147,29 +179,46 @@ function ready(error, world, data) {
     // // .append("g")
     // .attr('class', 'cities_start');
 
+    //   svg.selectAll('.cities_end')
+    //       .data(data)
+    //       .enter()
+    //       .append('circle')
+    //       .attr('cx', function(d) {
+    //           return projection([d.end_long, d.end_lat])[0]
+    //       })
+    //       .attr('cy', function(d) {
+    //           return projection([d.end_long, d.end_lat])[1]
+    //       })
+    //       .attr("r", function(d) {
+    // 	return Math.sqrt(d.count/Math.PI) * 1.3; 
+    // })
+    // .attr('class', 'cities_end');
+
+
     svg.selectAll('.cities_end')
         .data(data)
-        .enter()
-        .append('circle')
-        .attr('cx', function(d) {
-            return projection([d.end_long, d.end_lat])[0]
+        .enter().append("path")
+        .datum(function(d) {
+            return {
+                type: "Point",
+                coordinates: [d.end_long, d.end_lat],
+                count: +d.count
+            };
         })
-        .attr('cy', function(d) {
-            return projection([d.end_long, d.end_lat])[1]
-        })
-        .attr("r", function(d) {
-			return Math.sqrt(d.count/Math.PI); 
-		})
-		.attr('class', 'cities_end');
+        .attr("d", path)
+        .attr('class', 'cities_end');
+
+
 
     svg.append("g")
         .attr("class", "line")
-        .selectAll(".arcs")
+        .selectAll(".arc")
         .data(data.map(function(d) {
             return d.arc;
         }))
         .enter()
         .append("path")
+        .attr("class", "arc")
         .attr("d", path);
 }
 
@@ -187,26 +236,79 @@ d3.select("svg").call( //drag on the svg element
         /* update retation angle */
         projection.rotate([d3.event.x, -d3.event.y, r[2]]);
         /* redraw the map and circles after rotation */
-        svg.selectAll("path").attr("d", path);
+        svg.selectAll(".baseMap").attr("d", path);
 
-        svg.selectAll(".cities_start")
-            .attr('cx', function(d) {
-                return projection([d.start_long, d.start_lat])[0]
-            })
-            .attr('cy', function(d) {
-                return projection([d.start_long, d.start_lat])[1]
-            })
+        svg.selectAll(".arc").attr("d", path);
 
-        svg.selectAll(".cities_end")
-            .attr('cx', function(d) {
-                return projection([d.end_long, d.end_lat])[0]
-            })
-            .attr('cy', function(d) {
-                return projection([d.end_long, d.end_lat])[1]
-            })
+        // svg.selectAll(".cities_start")
+        //     .attr('cx', function(d) {
+        //         return projection([d.start_long, d.start_lat])[0]
+        //     })
+        //     .attr('cy', function(d) {
+        //         return projection([d.start_long, d.start_lat])[1]
+        //     })
+
+        // svg.selectAll(".cities_end")
+        //     .attr('cx', function(d) {
+        //         return projection([d.end_long, d.end_lat])[0]
+        //     })
+        //     .attr('cy', function(d) {
+        //         return projection([d.end_long, d.end_lat])[1]
+        //     })
+
+
+        svg.selectAll('.cities_end')
+            .attr("d", path);
+
+
+
+
 
     })
 );
+
+
+
+
+
+
+
+
+
+// apply transformations to map and all elements on it 
+function zoomed() {
+    pathG.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    //grids.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    //geofeatures.select("path.graticule").style("stroke-width", 0.5 / d3.event.scale);
+    pathG.selectAll("path.boundary").style("stroke-width", 0.5 / d3.event.scale);
+}
+
+function zoomedEnhanced() {
+    pathG.selectAll("path").attr("d", path);
+}
+
+function dragstarted(d) {
+    //stopPropagation prevents dragging to "bubble up" which triggers same event for all elements below this object
+    d3.event.sourceEvent.stopPropagation();
+    d3.select(this).classed("dragging", true);
+}
+
+function dragged() {
+    projection.rotate([d3.event.x, -d3.event.y]);
+    pathG.selectAll("path").attr("d", path);
+}
+
+function dragended(d) {
+    d3.select(this).classed("dragging", false);
+}
+
+
+
+
+
+
+
+
 
 function responsivefy(svg) {
     var container = d3.select(svg.node().parentNode),

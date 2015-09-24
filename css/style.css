@@ -12,14 +12,14 @@ div {
 	outline: 1px solid black;
 }
 
-/*svg {
+svg {
 	outline: 1px solid orange;
 }
 
 g {
 	outline: 1px solid red;
 }
-*/
+
 
 
 
@@ -27,9 +27,13 @@ g {
 
 .baseMap{
   stroke-width:0.8px;
-  stroke:white;
-  fill:#E4E5E6;
-  opacity:0.9;
+  stroke:#555;
+  fill:#555;
+  opacity:0.5;
+}
+
+.globe {
+	fill: #000;
 }
 
 .cities_start{
@@ -39,7 +43,8 @@ g {
 
 .cities_end{
   /*fill:rgba(29, 168, 183, .5);*/
-  fill:rgba(253,141,3,.5);
+  fill:rgba(254,194,65,.8);
+  254
   stroke-width: .25;
   stroke: white;
  /* fill:none;*/
@@ -47,7 +52,7 @@ g {
 
 .line{
 /*  stroke:rgba(0, 0, 0, 0.3);*/
-  stroke:rgba(253,141,3,.1);
+  stroke:rgba(253,141,3,.3);
   stroke-width:1px;
   fill:none;
   /*stroke-dasharray:3, 3;*/
