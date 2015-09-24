@@ -25,9 +25,14 @@ var margin = {
 //   .scale(125); // feel free to tweak the number for scale and see the changes
 
 
-//This is the project for the globe 
-var projection = d3.geo.orthographic().scale(280).translate([400, 300]).clipAngle(90).precision(0.5);
 
+
+//This is the project for the globe 
+var projection = d3.geo.orthographic()
+	.scale(300)
+	.translate([width/2, height/2])
+	.clipAngle(90)
+	.precision(0.5);
 
 
 var path = d3.geo.path()
