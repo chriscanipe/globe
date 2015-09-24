@@ -1,6 +1,59 @@
 
 
 
-.chart {
-  height: 500px;
+#map {
+  height: 800px;
 }
+
+
+
+
+div {
+	outline: 1px solid black;
+}
+
+/*svg {
+	outline: 1px solid orange;
+}
+
+g {
+	outline: 1px solid red;
+}
+*/
+
+
+
+
+
+.baseMap{
+  stroke-width:0.8px;
+  stroke:white;
+  fill:#E4E5E6;
+  opacity:0.9;
+}
+
+.cities_start{
+  fill:rgba(199,70,70,.8);
+/*  fill:none;*/
+}
+
+.cities_end{
+  /*fill:rgba(29, 168, 183, .5);*/
+  fill:rgba(253,141,3,.5);
+  stroke-width: .25;
+  stroke: white;
+ /* fill:none;*/
+  }
+
+.line{
+/*  stroke:rgba(0, 0, 0, 0.3);*/
+  stroke:rgba(253,141,3,.1);
+  stroke-width:1px;
+  fill:none;
+  /*stroke-dasharray:3, 3;*/
+}
+
+.geo-globe {
+  fill: rgba(236,249,255,0.8);
+/*  fill:white;*/
+    }
