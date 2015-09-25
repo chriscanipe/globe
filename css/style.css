@@ -33,7 +33,16 @@ h1{
 body{
   /*font-family: 'Crimson Text';*/
   font-family: 'Source Sans Pro', sans-serif;
-  font-size:14px;
+  font-size:18px;
+}
+
+.instruction{
+  color: grey;
+  font-size: .8em;
+}
+
+h3{
+  font-weight: 600;
 }
 
 
@@ -124,6 +133,8 @@ body{
 	padding-top: 30px;
 	text-align: left;
 }
+
+
 /* --------------------- */
 /* TABLES STYLES */
 /* --------------------- */
@@ -136,6 +147,10 @@ body{
 
 .background{
   background-color: rgba(211,211,211, .3);
+}
+
+td.num {
+  text-align: right;
 }
 
 
