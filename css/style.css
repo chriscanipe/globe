@@ -1,20 +1,18 @@
 
 
 
-#map {
-  height: 800px;
-}
 
 
 
-
-
-/*div {
+div {
 	outline: 1px solid black;
-}*/
+}
 
 /*svg {
 	outline: 1px solid orange;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 g {
@@ -23,12 +21,18 @@ g {
 
 
 h1{
-  font-family:"Libre Baskerville";
+  /*font-family:"Libre Baskerville";*/
+
+	font-family: "Source Sans Pro",sans-serif;
+	font-style: normal;
+	font-weight: 800;
+
  /* font-size:22px;*/
 }
 
 body{
-  font-family: 'Crimson Text';
+  /*font-family: 'Crimson Text';*/
+  font-family: 'Source Sans Pro', sans-serif;
   font-size:18px;
 }
 
@@ -95,7 +99,30 @@ body{
 /* CHARTS STYLES */
 /* --------------------- */
 
+.map-row {
+	text-align: center;
+	position: relative;
 
+}
 
+#map {
+	width: 100%;
+	max-width: 650px;
+	position: relative;
+	display: inline-block;
+}
+
+.overlay {
+	fill: #FFF;
+}
+
+.reset-btn {
+	margin: 0 auto;
+}
+
+.globe-text {
+	padding-top: 30px;
+	text-align: left;
+}
 
 
