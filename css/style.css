@@ -7,12 +7,13 @@
 
 
 
+
 /*
 div {
 	outline: 1px solid black;
-}
+}*/
 
-svg {
+/*svg {
 	outline: 1px solid orange;
 }
 
@@ -21,9 +22,20 @@ g {
 }*/
 
 
+h1{
+  font-family:"Libre Baskerville";
+ /* font-size:22px;*/
+}
+
+body{
+  font-family: 'Crimson Text';
+  font-size:18px;
+}
 
 
-
+/* --------------------- */
+/* SVG STYLES */
+/* --------------------- */
 
 .baseMap{
   stroke-width:0.8px;
@@ -62,3 +74,31 @@ g {
   fill: rgba(236,249,255,0.8);
 /*  fill:white;*/
     }
+
+/* --------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------- */
+/* CHARTS STYLES */
+/* --------------------- */
+
+
+.chart {
+  height: 300px;
+}
+
+
+
