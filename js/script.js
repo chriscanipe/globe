@@ -326,7 +326,7 @@ function responsivefy(svg) {
         .call(resize);
 
     d3.select(window).on('resize', resize);
-
+    $("#map").css("height", $("#map").width() + "px");
     function resize() {
         var targetWidth = parseInt(container.style('width'));
         svg.attr('width', targetWidth);

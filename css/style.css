@@ -8,10 +8,10 @@
 
 
 
-/*
+
 div {
 	outline: 1px solid black;
-}*/
+}
 
 /*svg {
 	outline: 1px solid orange;
@@ -96,9 +96,6 @@ body{
 /* --------------------- */
 
 
-.chart {
-  height: 300px;
-}
 
 
 
