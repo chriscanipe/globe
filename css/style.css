@@ -4,9 +4,9 @@
 
 
 
-div {
+/*div {
 	outline: 1px solid black;
-}
+}*/
 
 /*svg {
 	outline: 1px solid orange;
@@ -124,9 +124,21 @@ body{
 	padding-top: 30px;
 	text-align: left;
 }
+/* --------------------- */
+/* TABLES STYLES */
+/* --------------------- */
+
 
 /*.table {
   font-size: 12px;
 }
 */
 
+.background{
+  background-color: rgba(211,211,211, .3);
+}
+
+
+.fix_margin{
+  margin-top: 50px;
+}
