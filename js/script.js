@@ -289,6 +289,9 @@ function zoomed(d) {
 }
 
 function zoomedEnhanced() {
+
+	$(".reset-btn").removeClass("disabled");
+
     svg.selectAll(".baseMap").attr("d", path);
     svg.selectAll(".arc").attr("d", path);
     svg.selectAll('.cities_end').attr("d", path);
@@ -312,8 +315,6 @@ function zoomedEnhanced() {
 //     console.log("dragended()");
 //     d3.select(this).classed("dragging", false);
 // }
-
-
 
 
 
