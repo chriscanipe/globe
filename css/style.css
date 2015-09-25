@@ -6,31 +6,38 @@
 }
 
 .overlay {
-	fill: none;
+	fill: #FFF;
 }
 
-
-/*
 div {
 	outline: 1px solid black;
-}*/
+}
 
-/*svg {
+svg {
 	outline: 1px solid orange;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 g {
 	outline: 1px solid red;
-}*/
+}
 
 
 h1{
-  font-family:"Libre Baskerville";
+  /*font-family:"Libre Baskerville";*/
+
+	font-family: "Source Sans Pro",sans-serif;
+	font-style: normal;
+	font-weight: 800;
+
  /* font-size:22px;*/
 }
 
 body{
-  font-family: 'Crimson Text';
+  /*font-family: 'Crimson Text';*/
+  font-family: 'Source Sans Pro', sans-serif;
   font-size:18px;
 }
 

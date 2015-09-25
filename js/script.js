@@ -9,10 +9,12 @@
 // Here's the link to the margin convention 
 // http://bl.ocks.org/mbostock/3019563
 
-$("#map").css("height", $("#map").width()+"px");
 
+//Set map hieght to be the same as the width of the #Map div.
+//Should be a squre.
+$("#map").css("height", $("#map").outerWidth() + "px");
 
-
+var sens = .1
 
 var margin = {
         top: 15,
@@ -20,56 +22,41 @@ var margin = {
         bottom: 15,
         left: 15
     },
-    width = $("#map").width() - margin.left - margin.right,
-    height = $("#map").height() - margin.top - margin.bottom;
-
+    width = $("#map").outerWidth() - margin.left - margin.right,
+    height = $("#map").outerHeight() - margin.top - margin.bottom;
 
 
 //This is the project for the globe 
 var projection = d3.geo.orthographic()
-	.scale(height/2 - margin.left - margin.right)
-	.translate([width/2, height/2])
-	.clipAngle(90)
-	.precision(0.5);
+    .scale(height / 2 - margin.left - margin.right)
+    .translate([width / 2, height / 2])
+    .clipAngle(90)
+    .precision(0.5);
 
 
+//Centerpoint for Los Angeles.
 var losAngeles = [34.0575283, -118.4159553];
 
+//Set intitial view so LA is centerpoint.
+projection.rotate([94.7908512330838, -40.79682768575549, 0]);
 
-projection.rotate([112.7908512330838, -43.79682768575549, 0]);
-
-
-
-
-
+//Path function. All paths are drawn through the projection.
 var path = d3.geo.path()
     .projection(projection)
     .pointRadius(function(d) {
+        //This is where we set circle radii to show count of attendees
         if (d.count) {
             return Math.sqrt(d.count / Math.PI) * 1.3;
         }
     });
 
-
-
-
-
+//Zoom is defined.
 var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 6])
+    .scaleExtent([1, 3])
     .on("zoom", zoomed);
 
 var zoomEnhanced = d3.geo.zoom().projection(projection)
-        .on("zoom",zoomedEnhanced);
-
-
-var drag = d3.behavior.drag()
-          .origin(function() { var r = projection.rotate(); return {x: r[0], y: -r[1]}; })
-          .on("drag", dragged)
-          .on("dragstart", dragstarted)
-          .on("dragend", dragended);
-
-
-
+    .on("zoom", zoomedEnhanced);
 
 // Create a voronoi layer for better mouse interaction experience
 // For more reading on voronoi, check out 
@@ -87,6 +74,8 @@ var voronoi = d3.geom.voronoi()
         [width, height]
     ]);
 
+
+
 var svg = d3.select('#map').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
@@ -94,18 +83,11 @@ var svg = d3.select('#map').append('svg')
     .call(responsivefy) // Call function responsivefy to make the graphic reponsive according to the window width/height
     .append('g')
     .attr("class", "globe-g")
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-var backgroundCircle = svg.append("circle")
-    .attr('cx', width / 1.85)
-    .attr('cy', height / 1.85)
-    .attr('r', 0)
-    .attr('class', 'geo-globe');
-
-//backgroundCircle.attr('r', projection.scale());
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    .call(zoomEnhanced);
 
 
-// Globe Outline
+// Globe Outline (Background circle)
 // -------------
 var globe = svg.selectAll('path.globe').data([{
         type: 'Sphere'
@@ -115,12 +97,6 @@ var globe = svg.selectAll('path.globe').data([{
     .attr('d', path);
 
 
-
-svg.append("rect")
-    .attr("class", "overlay")
-    .attr("width", width)
-    .attr("height", height)
-    .call(zoomEnhanced)
 
 
 
@@ -156,10 +132,6 @@ function ready(error, world, data) {
             d.start_lat = losAngeles[0];
             d.start_long = losAngeles[1];
 
-            
-
-
-
             if (isNaN(latlong[0]) || isNaN(latlong[1])) {
                 //Do nothing.
             } else {
@@ -175,10 +147,6 @@ function ready(error, world, data) {
                 });
                 d.arc = d.line.json();
             }
-
-
-
-
 
         }
     );
@@ -202,36 +170,6 @@ function ready(error, world, data) {
     // .append("g")
     .attr('class', 'baseMap');
 
-    // svg.selectAll('.cities_start')
-    //     .data(data)
-    //     .enter()
-    //     .append('circle')
-    //     .attr('cx', function(d) {
-    //         return projection([d.start_long, d.start_lat])[0]
-    //     })
-    //     .attr('cy', function(d) {
-    //         return projection([d.start_long, d.start_lat])[1]
-    //     })
-    //     .attr('r', '3')
-    // // .append("g")
-    // .attr('class', 'cities_start');
-
-    //   svg.selectAll('.cities_end')
-    //       .data(data)
-    //       .enter()
-    //       .append('circle')
-    //       .attr('cx', function(d) {
-    //           return projection([d.end_long, d.end_lat])[0]
-    //       })
-    //       .attr('cy', function(d) {
-    //           return projection([d.end_long, d.end_lat])[1]
-    //       })
-    //       .attr("r", function(d) {
-    // 	return Math.sqrt(d.count/Math.PI) * 1.3; 
-    // })
-    // .attr('class', 'cities_end');
-
-
     svg.selectAll('.cities_end')
         .data(data)
         .enter().append("path")
@@ -244,8 +182,6 @@ function ready(error, world, data) {
         })
         .attr("d", path)
         .attr('class', 'cities_end');
-
-
 
     svg.append("g")
         .attr("class", "line")
@@ -263,9 +199,6 @@ d3.select("svg").call( //drag on the svg element
     d3.behavior.drag()
     .origin(function() {
         var r = projection.rotate();
-
-        console.log(r);
-
         return {
             x: r[0],
             y: -r[1]
@@ -276,40 +209,38 @@ d3.select("svg").call( //drag on the svg element
         /* update retation angle */
         projection.rotate([d3.event.x, -d3.event.y, r[2]]);
 
-
-        console.log([d3.event.x, -d3.event.y, r[2]]);
-
         /* redraw the map and circles after rotation */
         svg.selectAll(".baseMap").attr("d", path);
-
         svg.selectAll(".arc").attr("d", path);
-
-        // svg.selectAll(".cities_start")
-        //     .attr('cx', function(d) {
-        //         return projection([d.start_long, d.start_lat])[0]
-        //     })
-        //     .attr('cy', function(d) {
-        //         return projection([d.start_long, d.start_lat])[1]
-        //     })
-
-        // svg.selectAll(".cities_end")
-        //     .attr('cx', function(d) {
-        //         return projection([d.end_long, d.end_lat])[0]
-        //     })
-        //     .attr('cy', function(d) {
-        //         return projection([d.end_long, d.end_lat])[1]
-        //     })
-
-
         svg.selectAll('.cities_end')
             .attr("d", path);
-
-
-
-
-
     })
 );
+
+
+d3.select("svg")
+    .call(d3.behavior.drag()
+        .origin(function() {
+            var r = projection.rotate();
+            return {
+                x: r[0] / sens,
+                y: -r[1] / sens
+            }; //starting point
+        })
+        .on("drag", function() {
+            var rotate = projection.rotate();
+            
+            projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
+
+            /* redraw the map and circles after rotation */
+            svg.selectAll(".baseMap").attr("d", path);
+            svg.selectAll(".arc").attr("d", path);
+            svg.selectAll('.cities_end')
+                .attr("d", path);
+
+
+
+        }))
 
 
 
@@ -328,31 +259,30 @@ function zoomed() {
 }
 
 function zoomedEnhanced() {
-	console.log("zoomEnhanced()");
-   	svg.selectAll(".baseMap").attr("d", path);
-
-   	svg.selectAll(".arc").attr("d", path);
-	svg.selectAll('.cities_end').attr("d", path);
-
+    console.log("zoomEnhanced()");
+    svg.selectAll(".baseMap").attr("d", path);
+    svg.selectAll(".arc").attr("d", path);
+    svg.selectAll('.cities_end').attr("d", path);
+    svg.selectAll('.globe').attr("d", path);
 }
 
-function dragstarted(d) {
-	console.log("dragstarted()");
-    //stopPropagation prevents dragging to "bubble up" which triggers same event for all elements below this object
-    d3.event.sourceEvent.stopPropagation();
-    d3.select(this).classed("dragging", true);
-}
+// function dragstarted(d) {
+//     console.log("dragstarted()");
+//     //stopPropagation prevents dragging to "bubble up" which triggers same event for all elements below this object
+//     d3.event.sourceEvent.stopPropagation();
+//     d3.select(this).classed("dragging", true);
+// }
 
-function dragged() {
-	console.log("dragged()");
-    projection.rotate([d3.event.x, -d3.event.y]);
-    svg.selectAll("path").attr("d", path);
-}
+// function dragged() {
+//     console.log("dragged()");
+//     projection.rotate([d3.event.x, -d3.event.y]);
+//     svg.selectAll("path").attr("d", path);
+// }
 
-function dragended(d) {
-	console.log("dragended()");
-    d3.select(this).classed("dragging", false);
-}
+// function dragended(d) {
+//     console.log("dragended()");
+//     d3.select(this).classed("dragging", false);
+// }
 
 
 
@@ -376,7 +306,7 @@ function responsivefy(svg) {
 
     function resize() {
 
-    	$("#map").css("height", $("#map").width()+"px");
+        $("#map").css("height", $("#map").width() + "px");
 
         var targetWidth = parseInt(container.style('width'));
         svg.attr('width', targetWidth);
