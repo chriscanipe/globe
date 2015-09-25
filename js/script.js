@@ -258,7 +258,7 @@ $(".reset-btn").on("click", function() {
 function reset() {
 
     //This is the project for the globe 
-    projection.scale(height / 2 - margin.left - margin.right)
+    projection.scale(height / 2)
         .translate([width / 2, height / 2]);
 
     //Set intitial view so LA is centerpoint.
