@@ -33,7 +33,7 @@ h1{
 body{
   /*font-family: 'Crimson Text';*/
   font-family: 'Source Sans Pro', sans-serif;
-  font-size:18px;
+  font-size:14px;
 }
 
 
@@ -125,4 +125,8 @@ body{
 	text-align: left;
 }
 
+/*.table {
+  font-size: 12px;
+}
+*/
 
