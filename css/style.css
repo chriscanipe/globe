@@ -1,13 +1,8 @@
 
 
 
-#map {
-	width: 100%;
-}
 
-.overlay {
-	fill: #FFF;
-}
+
 
 div {
 	outline: 1px solid black;
@@ -104,10 +99,30 @@ body{
 /* CHARTS STYLES */
 /* --------------------- */
 
+.map-row {
+	text-align: center;
+	position: relative;
 
-.chart {
-  height: 300px;
 }
 
+#map {
+	width: 100%;
+	max-width: 650px;
+	position: relative;
+	display: inline-block;
+}
+
+.overlay {
+	fill: #FFF;
+}
+
+.reset-btn {
+	margin: 0 auto;
+}
+
+.globe-text {
+	padding-top: 30px;
+	text-align: left;
+}
 
 

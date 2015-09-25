@@ -28,7 +28,7 @@ var margin = {
 
 //This is the project for the globe 
 var projection = d3.geo.orthographic()
-    .scale(height / 2 - margin.left - margin.right)
+    .scale(height / 2)
     .translate([width / 2, height / 2])
     .clipAngle(90)
     .precision(0.5);
@@ -214,6 +214,8 @@ d3.select("svg").call( //drag on the svg element
         svg.selectAll(".arc").attr("d", path);
         svg.selectAll('.cities_end')
             .attr("d", path);
+
+        $(".reset-btn").removeClass("disabled");
     })
 );
 
@@ -229,7 +231,7 @@ d3.select("svg")
         })
         .on("drag", function() {
             var rotate = projection.rotate();
-            
+
             projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
 
             /* redraw the map and circles after rotation */
@@ -238,11 +240,38 @@ d3.select("svg")
             svg.selectAll('.cities_end')
                 .attr("d", path);
 
+            $(".reset-btn").removeClass("disabled");
 
 
         }))
 
 
+
+
+$(".reset-btn").on("click", function() {
+    reset();
+})
+
+
+
+
+function reset() {
+
+    //This is the project for the globe 
+    projection.scale(height / 2 - margin.left - margin.right)
+        .translate([width / 2, height / 2]);
+
+    //Set intitial view so LA is centerpoint.
+    projection.rotate([94.7908512330838, -40.79682768575549, 0]);
+
+    svg.selectAll(".baseMap").transition().duration(500).attr("d", path);
+    svg.selectAll(".arc").transition().duration(500).attr("d", path);
+    svg.selectAll('.cities_end').transition().duration(500).attr("d", path);
+    svg.selectAll('.globe').transition().duration(500).attr("d", path);
+
+    $(".reset-btn").addClass("disabled");
+
+}
 
 
 
@@ -251,7 +280,8 @@ d3.select("svg")
 
 
 // apply transformations to map and all elements on it 
-function zoomed() {
+function zoomed(d) {
+
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     //grids.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     //geofeatures.select("path.graticule").style("stroke-width", 0.5 / d3.event.scale);
@@ -259,7 +289,6 @@ function zoomed() {
 }
 
 function zoomedEnhanced() {
-    console.log("zoomEnhanced()");
     svg.selectAll(".baseMap").attr("d", path);
     svg.selectAll(".arc").attr("d", path);
     svg.selectAll('.cities_end').attr("d", path);
@@ -303,6 +332,7 @@ function responsivefy(svg) {
         .call(resize);
 
     d3.select(window).on('resize', resize);
+    $("#map").css("height", $("#map").width() + "px");
 
     function resize() {
 
