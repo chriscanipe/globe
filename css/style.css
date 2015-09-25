@@ -2,10 +2,12 @@
 
 
 #map {
-  height: 800px;
+	width: 100%;
 }
 
-
+.overlay {
+	fill: none;
+}
 
 /*
 div {
